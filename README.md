@@ -10,3 +10,8 @@ ADRI 2: 0x1f58f419c0108bcaA78457E6a190AcF984E6bC3b
 VICTOR 1: 0xc6246ACA6BA8991BFb810Ae064Fe2725fD1a4664
 VICTOR 2: 0xc6246ACA6BA8991BFb810Ae064Fe2725fD1a4664
 ```
+## FILE STRUCTURE
+### nomes-client
+Aplicació molt senzilla, només de frontend, és a dir amb el *web3* carregat amb un script.
+### node-app
+Aplicació amb un *package.json* , carregant *web3* a través de *node_modeules*.

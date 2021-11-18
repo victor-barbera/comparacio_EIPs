@@ -1,0 +1,11 @@
+{
+  "name": "web3-node",
+  "version": "1.0.0",
+  "description": "Versió gestionada amb node, en comtes de fer-ho tot al client.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
