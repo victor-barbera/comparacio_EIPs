@@ -3,7 +3,9 @@
 
 <head>
   <meta charset="utf-8">
-  <script src="./web3.min.js"></script>
+  <!-- <script src="./web3.min.js"></script> -->
+  <script src="../node-app/node_modules/web3/dist/web3.min.js"></script>
+
 </head>
 
 <body>
@@ -46,7 +48,8 @@
   <!--------------------------->
 
   <script>
-    const SMART_CONTRACT_ADDRESS = "0xff260D5340242deAb39263d1a14a4D56195E1950";
+    const fromAddress='0xDa5E6B7f172847d63676aA6aC51e108a06c2044D';
+    const SMART_CONTRACT_ADDRESS = "0xcA34d500832C81e9EC128BcE7DDe1748Bdd725E3";
     const FT_ABI = [
       {
         "anonymous": false,
@@ -94,7 +97,6 @@
         "type": "function"
       },
       {
-        "constant": true,
         "inputs": [
           {
             "internalType": "address",
@@ -140,18 +142,18 @@
 
       console.log("send amount of", amount, 'to', toWallet);
 
-      let receipt = await contract.transfer(
+      let receipt = await contract.methods.transfer(
         //{
         //from: SMART_CONTRACT_ADDRESS,
         //_to:
-        0xDa5E6B7f172847d63676aA6aC51e108a06c2044D,
+        fromAddress,
         toWallet,
         //_value: 
         amount
         //}
-      )
+      ).send();
       console.log(receipt);
-      console.log(await contract.Transfer());
+      //console.log(await contract.Transfer());
 
       /*.on('transactionHash', function (hash) {
           console.log(hash);
@@ -164,7 +166,10 @@
       } else {
         web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/15a6a4951e1345ebaecccbf617140e64"));
       }
-      contract = web3.eth.contract(FT_ABI).at(SMART_CONTRACT_ADDRESS);
+      contract = new web3.eth.Contract(FT_ABI, SMART_CONTRACT_ADDRESS, {
+    from: fromAddress
+});
+      //contract = web3.eth.contract(FT_ABI).at(SMART_CONTRACT_ADDRESS);
       console.log(contract);
       console.log(web3.version.api);
     }
