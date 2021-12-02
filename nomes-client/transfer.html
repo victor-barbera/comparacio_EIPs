@@ -130,7 +130,7 @@
 
     function getBalance() {
       const balanceWallet = document.getElementById('balance-address').value;
-      contract.balanceOf(balanceWallet, (error, balance) => {
+      contract.methods.balanceOf(balanceWallet, (error, balance) => {
         document.getElementById('balance-result').innerText = balance.toString();
       });
     }

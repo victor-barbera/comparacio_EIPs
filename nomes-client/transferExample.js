@@ -37,7 +37,7 @@ const currentGasPrices = await getCurrentGasPrices();
 let nonce = web3.eth.getTransactionCount(fromAddress);
 // Will call estimate the gas a method execution will take when executed in the EVM without.
 let estimateGas = await web3.eth.estimateGas({
-    "value": '0x0', // Only tokens
+    "value": '0x0', 
     "data": contract.methods.transfer(toAddress, tokenAmount).encodeABI(),
     "from": fromAddress,
     "to": toAddress
@@ -46,6 +46,7 @@ console.log({
     estimateGas: estimateGas
 });
 // Build a new transaction object.
+/*
 const transaction = {
     "value": '0x0', // Only tokens
     "data": contract.methods.transfer(toAddress, tokenAmount).encodeABI(),
@@ -55,6 +56,17 @@ const transaction = {
     "gasLimit": web3.utils.toHex(estimateGas * 1.10),
     "gasPrice": web3.utils.toHex(Math.trunc(currentGasPrices.medium * 1e9)),
     "chainId": web3.utils.toHex(chainList.mainnet)
+};*/
+let lastCountOfTransaction = await web3.eth.getTransactionCount(fromAddress)
+
+const transaction = {
+    "value": '0x01',                            
+    "nonce": '0x' + lastCountOfTransaction.toString(16),      
+    "contractAddress":"0xd9145CCE52D386f254917e481eB44e9943F39138",
+    "data": contract.methods.transfer(fromAddress, toAddress, tokenAmount).encodeABI(),
+    "from": fromAddress,
+    "to": toAddress,
+    "gas": web3.utils.toHex(24200)
 };
 // Creates an account object from a private key.
 const senderAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
