@@ -49,90 +49,100 @@
 
   <script>
     const fromAddress='0xDa5E6B7f172847d63676aA6aC51e108a06c2044D';
-    const SMART_CONTRACT_ADDRESS = "0xcA34d500832C81e9EC128BcE7DDe1748Bdd725E3";
-    const FT_ABI = [
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "indexed": true,
-            "internalType": "address",
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "Transfer",
-        "type": "event"
-      },
-      {
-        "constant": true,
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-          {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_value",
-            "type": "uint256"
-          }
-        ],
-        "name": "transfer",
-        "outputs": [
-          {
-            "internalType": "bool",
-            "name": "success",
-            "type": "bool"
-          }
-        ],
-        "stateMutability": "payable",
-        "type": "function"
-      },
+    const SMART_CONTRACT_ADDRESS = "0xbf7c4DEF48D4314dF20BC77A98b86400B3d8C73C";
+    //const { FT_ABI } = import('./FT_ABI.json');
+    const FT_ABI= [
 
-    ];
-
-    function getBalance() {
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "_from",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Transfer",
+            "type": "event"
+        },
+        { "constant": true,
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "balanceOf",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+          "constant": true,
+            "inputs": [],
+            "name": "totalSupply",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "success",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "payable",
+            "type": "function"
+        }
+    ]
+        async function getBalance() {
       const balanceWallet = document.getElementById('balance-address').value;
-      contract.methods.balanceOf(balanceWallet, (error, balance) => {
-        document.getElementById('balance-result').innerText = balance.toString();
-      });
+      let balance = await contract.methods.balanceOf(balanceWallet).call();
+      document.getElementById('balance-result').innerText = balance.toString();
+      // contract.methods.balanceOf(balanceWallet, (error, balance) => {
+      //   document.getElementById('balance-result').innerText = balance.toString();
+      // });
     }
 
     async function send() {
@@ -160,7 +170,7 @@
         });*/
     }
 
-    window.onload = function () {
+    window.onload = async function () {
       if (typeof web3 !== 'undefined') {
         web3 = new Web3(web3.currentProvider);
       } else {
@@ -171,7 +181,9 @@
 });
       //contract = web3.eth.contract(FT_ABI).at(SMART_CONTRACT_ADDRESS);
       console.log(contract);
-      console.log(web3.version.api);
+      let totalSupply = await contract.methods.totalSupply().call();
+      console.log("TOTAL SUPPLY",totalSupply)
+      //console.log(web3.version.api);
     }
 
   </script>
