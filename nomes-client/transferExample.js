@@ -1,98 +1,98 @@
 
-    const fromAddress='0xDa5E6B7f172847d63676aA6aC51e108a06c2044D';
-    const SMART_CONTRACT_ADDRESS = "0xbf7c4DEF48D4314dF20BC77A98b86400B3d8C73C";
-    //const { FT_ABI } = import('./FT_ABI.json');
-    const FT_ABI= [
+//     const fromAddress='0xDa5E6B7f172847d63676aA6aC51e108a06c2044D';
+//     const SMART_CONTRACT_ADDRESS = "0xbf7c4DEF48D4314dF20BC77A98b86400B3d8C73C";
+//     //const { FT_ABI } = import('./FT_ABI.json');
+//     const FT_ABI= [
 
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "_from",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "_to",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "_value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "Transfer",
-            "type": "event"
-        },
-        { "constant": true,
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "balanceOf",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-          "constant": true,
-            "inputs": [],
-            "name": "totalSupply",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "_to",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "_value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transfer",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "success",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "payable",
-            "type": "function"
-        }
-    ]
+//         {
+//             "anonymous": false,
+//             "inputs": [
+//                 {
+//                     "indexed": true,
+//                     "internalType": "address",
+//                     "name": "_from",
+//                     "type": "address"
+//                 },
+//                 {
+//                     "indexed": true,
+//                     "internalType": "address",
+//                     "name": "_to",
+//                     "type": "address"
+//                 },
+//                 {
+//                     "indexed": false,
+//                     "internalType": "uint256",
+//                     "name": "_value",
+//                     "type": "uint256"
+//                 }
+//             ],
+//             "name": "Transfer",
+//             "type": "event"
+//         },
+//         { "constant": true,
+//             "inputs": [
+//                 {
+//                     "internalType": "address",
+//                     "name": "",
+//                     "type": "address"
+//                 }
+//             ],
+//             "name": "balanceOf",
+//             "outputs": [
+//                 {
+//                     "internalType": "uint256",
+//                     "name": "",
+//                     "type": "uint256"
+//                 }
+//             ],
+//             "stateMutability": "view",
+//             "type": "function"
+//         },
+//         {
+//           "constant": true,
+//             "inputs": [],
+//             "name": "totalSupply",
+//             "outputs": [
+//                 {
+//                     "internalType": "uint256",
+//                     "name": "",
+//                     "type": "uint256"
+//                 }
+//             ],
+//             "stateMutability": "view",
+//             "type": "function"
+//         },
+//         {
+//             "inputs": [
+//                 {
+//                     "internalType": "address",
+//                     "name": "_to",
+//                     "type": "address"
+//                 },
+//                 {
+//                     "internalType": "uint256",
+//                     "name": "_value",
+//                     "type": "uint256"
+//                 }
+//             ],
+//             "name": "transfer",
+//             "outputs": [
+//                 {
+//                     "internalType": "bool",
+//                     "name": "success",
+//                     "type": "bool"
+//                 }
+//             ],
+//             "stateMutability": "payable",
+//             "type": "function"
+//         }
+//     ]
         
-web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/15a6a4951e1345ebaecccbf617140e64"));
+// web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/15a6a4951e1345ebaecccbf617140e64"));
 
-contract = new web3.eth.Contract(FT_ABI, SMART_CONTRACT_ADDRESS, {
-    from: fromAddress
-});
+// contract = new web3.eth.Contract(FT_ABI, SMART_CONTRACT_ADDRESS, {
+//     from: fromAddress
+// });
 
 //contract = web3.eth.contract(FT_ABI).at(SMART_CONTRACT_ADDRESS);
 console.log(contract);
@@ -100,32 +100,19 @@ let totalSupply = await contract.methods.totalSupply().call();
 console.log("TOTAL SUPPLY",totalSupply)
 
 //let tokenAddress = "0xbf7c4DEF48D4314dF20BC77A98b86400B3d8C73C";
-let toAddress = "0xDeCD84708c75258F8D491A324077fFd846C1884c";
+let toAddress = "0x1f58f419c0108bcaA78457E6a190AcF984E6bC3b";
 // calculate ERC20 token amount ( 18 decimals )
-let amount = 1;
+let amount = 2000000000000000;
+//let amount = 20;
 console.log("amount: " + amount);
-let tokenAmount = web3.utils.toWei(amount.toString(), 'ether')
+//let tokenAmount = web3.utils.toWei(amount.toString(), 'ether')
+let tokenAmount = web3.utils.toBN(amount.toString())//toHex(amount);
 console.log("token amount: " + tokenAmount);
 
 // How many tokens do I have before sending?
 let balance = await contract.methods.balanceOf(fromAddress).call();
 console.log(`Balance before send: ${balance}`);
-// EIP 155 - List of Chain ID's:
-// const chainList = {
-//     mainnet: 1,
-//     morden: 2,
-//     ropsten: 3,
-//     rinkeby: 4,
-//     ubiqMainnet: 8,
-//     ubiqTestnet: 9,
-//     rootstockMainnet: 30,
-//     rootstockTestnet: 31,
-//     kovan: 42,
-//     ethereumClassicMainnet: 61,
-//     ethereumClassicTestnet: 62,
-//     ewasmTestnet: 66,
-//     gethPrivateChains: 1337
-// };
+
 // The gas price is determined by the last few blocks median gas price.
 const avgGasPrice = await web3.eth.getGasPrice();
 // current transaction gas prices from https://ethgasstation.info/
@@ -137,12 +124,12 @@ const avgGasPrice = await web3.eth.getGasPrice();
  */
 
 let nonce = await web3.eth.getTransactionCount(fromAddress);
-
+console.log("nonce",nonce);
 
 // Will call estimate the gas a method execution will take when executed in the EVM without.
 let estimateGas = await web3.eth.estimateGas({
     "value": web3.utils.toHex(amount), 
-    "data": contract.methods.transfer(toAddress, tokenAmount).encodeABI(),
+    "data": contract.methods.transfer(toAddress, amount).encodeABI(),
     "from": fromAddress,
     "to": toAddress
 });
@@ -163,10 +150,10 @@ const transaction = {
 };*/
 
 const transaction = {
-    "value": web3.utils.toHex(amount),                           
+    "value": tokenAmount,                           
     "nonce": web3.utils.toHex(nonce),      
     //"contractAddress":"0xd9145CCE52D386f254917e481eB44e9943F39138",
-    "data": contract.methods.transfer( toAddress, tokenAmount).encodeABI(),
+    "data": contract.methods.transfer( toAddress, amount).encodeABI(),
     "from": fromAddress,
     "to": toAddress,
     "gas": web3.utils.toHex(24200)
