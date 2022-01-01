@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- <script src="./web3.min.js"></script> -->
+    <script src="../../node-app/node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Send ERC20 Token - FIRST TOKEN (FT)</h1>
+
+    <h2>Notes</h2>
+    <ul>
+        <li>Use MetaMask</li>
+    </ul>
+    <!----------BALANCE---------->
+    <h2>Balance</h2>
+
+    <h3>Address</h3>
+    <input type="text" id="balance-address"></input>
+    <p>e.g. 0xDa5E6B7f172847d63676aA6aC51e108a06c2044D</p>
+
+    <div><button id="get-balance" onclick="getBalance()">GET BALANCE</button></div>
+
+    <h3>Result</h3>
+    <span id="balance-result"></span>
+    <!--------------------------->
+    <!-----------SEND------------>
+    <h2>Send</h2>
+
+    <h3>Destination Address</h3>
+    <input type="text" id="to-address"></input>
+    <p>e.g. 0xDeCD84708c75258F8D491A324077fFd846C1884c</p>
+
+    <!-- <h2>Decimals</h2>
+  <input type="number" id="decimals" size="40" readonly></input> -->
+
+    <h3>Amount</h3>
+    <input type="number" id="amount"></input>
+
+    <div><button id="send" onclick="send()">Send ERC20 Token</button></div>
+
+    <h3>Result</h3>
+    <span id="send-result"></span>
+    <!--------------------------->
+
+    <script>
+        const SMART_CONTRACT_ADDRESS = "0x206668cD2DdE44A1D6DAfdAC4891AaF9F775E063";
+        //const { FT_ABI } = import('./FT_ABI.json');
+        const FT_ABI = [
+
+
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "balanceOf",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+
+            {
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_value",
+						"type": "uint256"
+					}
+				],
+				"name": "transfer",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+        ]
+        async function getBalance() {
+            const balanceWallet = document.getElementById('balance-address').value;
+            console.log(contract.methods.balanceOf(balanceWallet).encodeABI())
+            let balance = await contract.methods.balanceOf(balanceWallet).call();
+            console.log(balance)
+            document.getElementById('balance-result').innerText = balance.toString();
+            // contract.methods.balanceOf(balanceWallet, (error, balance) => {
+            //   document.getElementById('balance-result').innerText = balance.toString();
+            // });
+        }
+        async function send() {
+
+        try{
+
+            let accounts =  web3.eth.accounts.create();
+            const toAddress = document.getElementById('to-address').value;
+            //const toAddress =accounts.address;
+            const amount = document.getElementById('amount').value;
+
+            console.log("send amount of", amount, 'to', toAddress);
+            // console.log(contract.methods.transfer(toAddress, amount).encodeABI())
+            const avgGasPrice = await web3.eth.getGasPrice();
+            let nonce = await web3.eth.getTransactionCount(fromAddress);
+            let tokenAmount =web3.utils.toBN(amount.toString());
+            let estimateGas = await web3.eth.estimateGas({
+                "value": tokenAmount,
+                "data": contract.methods.transfer(toAddress, amount).encodeABI(),
+                "from": fromAddress,
+                "to": toAddress
+            });
+            console.log(estimateGas)
+            const transaction = {
+                "value": tokenAmount,                           
+                "nonce": web3.utils.toHex(nonce),      
+                //"contractAddress":"0xd9145CCE52D386f254917e481eB44e9943F39138",
+                "data": contract.methods.transfer( toAddress, amount).encodeABI(),
+                "from": fromAddress,
+                "to": toAddress,
+                "gas": web3.utils.toHex(24200),
+                "chainId":5777
+            };
+            console.log(transaction);
+            //privateKey = accounts.privateKey;
+            console.log(privateKey);
+           const senderAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+            console.log(senderAccount);
+            const signedTransaction = await senderAccount.signTransaction(transaction);
+            console.log({
+                transaction: transaction,
+                amount: amount,
+                tokenAmount: tokenAmount,
+                avgGasPrice: avgGasPrice,
+                signedTransaction: signedTransaction
+            });
+            console.log({                signedTransaction: signedTransaction
+})
+            const receipt = await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction);
+
+            console.log(receipt);
+            //console.log(await contract.Transfer());
+
+            /*.on('transactionHash', function (hash) {
+                console.log(hash);
+              });*/
+        }catch(e){
+            console.log(e)
+        }
+        }
+
+        window.onload = async function () {
+            // if (typeof web3 !== 'undefined') {
+            //     web3 = new Web3(web3.currentProvider);
+            // } else {
+            //     web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/15a6a4951e1345ebaecccbf617140e64"));
+            // }
+            web3 = new Web3(new Web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+
+            fromAddress = "0x33CE3d854B90Ee3Fe886c47B50e23590FEb04dFE";
+
+            contract = new web3.eth.Contract(FT_ABI, SMART_CONTRACT_ADDRESS, {
+                from: fromAddress
+            });
+            //contract = web3.eth.contract(FT_ABI).at(SMART_CONTRACT_ADDRESS);
+            console.log(contract);
+
+            privateKey = "0xf5a38201ce542126a0f8df2e3ee36a5a13bd9682b730fea2fad975b15f444cf0";
+
+            // let totalSupply = await contract.methods.totalSupply().call();
+            // console.log("TOTAL SUPPLY", totalSupply)
+            //console.log(web3.version.api);
+        }
+
+    </script>
+
+</body>
+
+</html>

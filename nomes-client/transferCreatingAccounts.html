@@ -48,7 +48,6 @@
     <!--------------------------->
 
     <script>
-        const fromAddress = '0xDa5E6B7f172847d63676aA6aC51e108a06c2044D';
         const SMART_CONTRACT_ADDRESS = "0x206668cD2DdE44A1D6DAfdAC4891AaF9F775E063";
         //const { FT_ABI } = import('./FT_ABI.json');
         const FT_ABI = [
@@ -224,13 +223,13 @@
 
         async function send() {
 
-            const toAddress = document.getElementById('to-address').value;
+            //const toAddress = document.getElementById('to-address').value;
+            const toAddress = web3.eth.accounts.create().address;
             const amount = document.getElementById('amount').value;
 
             console.log("send amount of", amount, 'to', toAddress);
-            const avgGasPrice = await web3.eth.getGasPrice();
-            let nonce = await web3.eth.getTransactionCount(fromAddress);
             let tokenAmount = web3.utils.toBN(amount.toString());
+
             let estimateGas = await web3.eth.estimateGas({
                 "value": tokenAmount,
                 "data": contract.methods.transfer(toAddress, amount).encodeABI(),
@@ -244,10 +243,12 @@
                 "data": contract.methods.transfer( toAddress, amount).encodeABI(),
                 "from": fromAddress,
                 "to": toAddress,
-                "gas": web3.utils.toHex(24200)
+                "gas": web3.utils.toHex(24200),
             };
-            let privateKey = "3b7159170c5041d497bcb1788f27ed2e8efe89cf4be17afb980e709c023f3033";
-            const senderAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+            // let privateKey = "";
+            //privateKey = accounts.privateKey;
+           const senderAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+           console.log(senderAccount)
             const signedTransaction = await senderAccount.signTransaction(transaction);
             console.log({
                 transaction: transaction,
@@ -256,18 +257,17 @@
                 avgGasPrice: avgGasPrice,
                 signedTransaction: signedTransaction
             });
-            const receipt = await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction);
+            console.log({                signedTransaction: signedTransaction
+})
+            // const receipt = await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction);
             // let receipt = await contract.methods.transfer(
-            //     //{
-            //     //from: SMART_CONTRACT_ADDRESS,
-            //     //_to:
-            //     fromAddress,
-            //     toWallet,
-            //     //_value: 
+            //     toAddress,
             //     amount
-            //     //}
-            // ).send();
-            console.log(receipt);
+            // ).send({ 
+            //     from: fromAddress,
+            //     gas: estimateGas
+            // });
+            // console.log(receipt);
             //console.log(await contract.Transfer());
 
             /*.on('transactionHash', function (hash) {
@@ -281,8 +281,11 @@
             // } else {
             //     web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/15a6a4951e1345ebaecccbf617140e64"));
             // }
-            web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/15a6a4951e1345ebaecccbf617140e64"));
-
+            web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/15a6a4951e1345ebaecccbf617140e64"));
+            const newAddress = web3.eth.accounts.create();
+            console.log(newAddress);
+            fromAddress = newAddress.address;
+            privateKey = newAddress.privateKey;
             contract = new web3.eth.Contract(FT_ABI, SMART_CONTRACT_ADDRESS, {
                 from: fromAddress
             });
