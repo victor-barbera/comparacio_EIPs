@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- <script src="./web3.min.js"></script> -->
+    <script src="../../node-app/node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+
+<body>
+
+    <h1>PARAULA</h1>
+
+    <!----------BALANCE---------->
+
+    <h2>Paraula</h2>
+
+    <!-- <p>e.g. 0xDa5E6B7f172847d63676aA6aC51e108a06c2044D</p> -->
+
+    <div><button id="get-paraula" onclick="getParaula()">GET PARAULA</button></div>
+
+    <h3>Result</h3>
+    <span id="paraula-result"></span>
+    <!--------------------------->
+    <!-----------SEND------------>
+    <h2>Canviar paraula</h2>
+
+    <h3>Nou valor</h3>
+    <input type="text" id="novaParaula"></input>
+
+    <div><button id="updateParaula" onclick="updateParaula()">Canvia</button></div>
+
+    <h3>Result</h3>
+    <span id="result"></span>
+    
+
+    <script>
+        const SMART_CONTRACT_ADDRESS = "0xB51Fa30fCe21aFD7199b96410629CE16eBe000f6";
+        const PARAULA_ABI = [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_novaParaula",
+						"type": "string"
+					}
+				],
+				"name": "modificarParaula",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "paraula",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		]
+        async function getParaula() {
+
+            let paraula = await contract.methods.paraula().call();
+
+            console.log(paraula)
+            document.getElementById('paraula-result').innerText = paraula;
+
+        }
+
+        async function updateParaula() {
+            const novaParaula = document.getElementById('novaParaula').value;
+            let result = await contract.methods.modificarParaula(novaParaula).send();
+            console.log(result)
+            document.getElementById('result').innerText = result.status;
+
+            }
+  
+        window.onload = async function () {
+
+            web3 = new Web3(new Web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+            // GANAGE ACCOUNT
+            fromAddress = "0xf91d4733f47dFa92b95ca02D1EE9ea964C4308AA";
+            privateKey = "0x4ed53d9e6e70d7580cce3ea90985eb5fe1d25de37139cf600e8779ac71289649";
+
+            contract = new web3.eth.Contract(PARAULA_ABI, SMART_CONTRACT_ADDRESS, {
+                from: fromAddress
+            });            
+            console.log(contract);
+        }
+
+    </script>
+
+</body>
+
+</html>
